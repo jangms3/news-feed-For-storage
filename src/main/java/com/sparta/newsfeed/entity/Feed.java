@@ -30,7 +30,7 @@ public class Feed extends Timestamped {
         return new Feed(requestDto.getContent());
     }
 
-    public FeedResponse to() {
+    public FeedResponse toEntity() {
         return new FeedResponse(
                 getId(),
                 getContent(),

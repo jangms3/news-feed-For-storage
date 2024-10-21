@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/")
@@ -21,6 +23,17 @@ public class FeedController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(feedService.createFeed(requestDto));
+    }
+
+    // READ
+    @GetMapping("api/feeds")
+    public ResponseEntity<List<FeedResponse>> readNextFeeds(
+            @RequestParam(required = false) Long lastCursorId,
+            @RequestParam(required = false, defaultValue = "10") Integer pageSize
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(feedService.readNextFeeds(lastCursorId, pageSize));
     }
 
     // READ selected feed

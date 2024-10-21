@@ -5,8 +5,13 @@ import com.sparta.newsfeed.feed.dto.FeedRequest;
 import com.sparta.newsfeed.feed.dto.FeedResponse;
 import com.sparta.newsfeed.feed.repository.FeedRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +25,15 @@ public class FeedService {
         Feed savedFeed = feedRepository.save(Feed.from(requestDto));
 
         // Entity -> ResponseDTO
-        return savedFeed.to();
+        return savedFeed.toEntity();
+    }
+
+    public List<FeedResponse> readNextFeeds(Long lastCursorId, Integer pageSize) {
+        Pageable pageable = PageRequest.of(0, pageSize);
+        List<Feed> feeds = feedRepository.findByIdGreaterThanOrderByIdAsc(lastCursorId, pageable);
+        return feeds.stream()
+                .map(Feed::toEntity)
+                .collect(Collectors.toList());
     }
 
     public FeedResponse readFeed(Long id) {
@@ -28,7 +41,7 @@ public class FeedService {
         Feed readFeed = feedRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 피드가 DB에 존재하지 않습니다."));
 
         // Entity -> ResponseDTO
-        return readFeed.to();
+        return readFeed.toEntity();
     }
 
     @Transactional
@@ -40,7 +53,7 @@ public class FeedService {
         feed.update(requestDto.getContent());
 
         // Entity -> ResponseDTO
-        return feed.to(); // DTO 반환할 경우
+        return feed.toEntity(); // DTO 반환할 경우
     }
 
     @Transactional
