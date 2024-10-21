@@ -4,6 +4,7 @@ import com.sparta.newsfeed.config.PasswordEncoder;
 import com.sparta.newsfeed.entity.Users;
 import com.sparta.newsfeed.user.otherDto.MyProfileResponseDto;
 import com.sparta.newsfeed.user.otherDto.ProfileResponseDto;
+import com.sparta.newsfeed.user.requestDto.LoginRequestDto;
 import com.sparta.newsfeed.user.requestDto.SignupRequestDto;
 import com.sparta.newsfeed.user.requestDto.UserCheckRequestDto;
 import com.sparta.newsfeed.user.requestDto.UserUpdateRequestDto;
@@ -33,6 +34,12 @@ public class UserController {
         userService.signup(username, pw, email, role);
         return ResponseEntity.ok("회원 가입 성공");
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDto loginRequestDto){
+        return null;
+    }
+
 
     @GetMapping("/profile/my")
     @ResponseBody
