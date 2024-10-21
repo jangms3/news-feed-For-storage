@@ -28,19 +28,20 @@ public class FriendController {
     public ResponseEntity <String> deleteFriends(@PathVariable ("userId") Long id) {
         friendService.deleteFriends(id);
         return ResponseEntity.ok("친삭 성공");
+        //인가 확인 필요
     }
 
     //대기친구조회
-    @GetMapping("/recieved")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<?> getWaitingFriendInfo() throws Exception {
-        return friendService.getWaitingFriendList();
-    }
-
-    //친구 수락
-    @PostMapping("/{userId}/approve")
-    @ResponseStatus(HttpStatus.OK)
-    public String approveFriend(@PathVariable ("userId") Long id) throws Exception {
-        return friendService.approveFriendRequest(id);
-    }
+//    @GetMapping("/recieved")
+//    @ResponseStatus(HttpStatus.OK)
+//    public ResponseEntity<?> getWaitingFriendInfo() throws Exception {
+//        return friendService.getWaitingFriendList();
+//    }
+//
+//    //친구 수락
+//    @PostMapping("/{userId}/approve")
+//    @ResponseStatus(HttpStatus.OK)
+//    public String approveFriend(@PathVariable ("userId") Long id) throws Exception {
+//        return friendService.approveFriendRequest(id);
+//    }
 }

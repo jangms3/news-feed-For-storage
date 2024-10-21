@@ -5,6 +5,7 @@ import com.sparta.newsfeed.entity.FriendshipStatus;
 import com.sparta.newsfeed.entity.Users;
 import com.sparta.newsfeed.friend.repository.FriendRepository;
 import com.sparta.newsfeed.user.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -57,15 +58,16 @@ public class FriendService {
 
     // 친구 삭제
     public void deleteFriends(Long id) {
+        Users user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
         friendRepository.deleteById(id);
     }
 
-//    // 받은 친구요청 조회
+    // 받은 친구요청 조회
 //    @Transactional
 //    public ResponseEntity<?> getWaitingFriendList() throws Exception {
-//        // 현재 로그인한 유저의 정보를 불러온다
-//        // --------------------------------------------------------------------------------//
-//        // 로그인한 유저 정보를 넣기
+    // 현재 로그인한 유저의 정보를 불러온다
+    // --------------------------------------------------------------------------------//
+    // 로그인한 유저 정보를 넣기
 //        Users users = userRepository.findById(-----.getLoginId()).orElsethrow(() -> new Exception("회원 조회 실패"));
 //        List<Friend> friendsList = users.getFriendList();
 //
@@ -100,4 +102,5 @@ public class FriendService {
 //
 //        return "승인 성공" ;
 //    }
+//}
 }
