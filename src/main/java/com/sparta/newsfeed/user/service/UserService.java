@@ -44,23 +44,19 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void login(LoginRequestDto loginRequestDto, HttpServletResponse res) {
+    public String login(LoginRequestDto loginRequestDto, HttpServletResponse res) {
         String username = loginRequestDto.getUsername();
         String password = loginRequestDto.getPassword();
-
         Users user = userRepository.findByUsername(username).orElseThrow(() ->
                 new IllegalArgumentException("등록된 사용자가 존재하지 않습니다.")
         );
-
         if(!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
-
         String token = jwtUtil.createToken(user.getUsername(), user.getRole());
         jwtUtil.addJwtCookie(token, res);
+        return token;
     }
-
-
 
     public MyProfileResponseDto getMyProfile(Long userId) {
         return new MyProfileResponseDto(findById(userId));

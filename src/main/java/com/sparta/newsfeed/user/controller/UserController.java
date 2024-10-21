@@ -10,6 +10,7 @@ import com.sparta.newsfeed.user.requestDto.UserCheckRequestDto;
 import com.sparta.newsfeed.user.requestDto.UserUpdateRequestDto;
 import com.sparta.newsfeed.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +37,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDto loginRequestDto){
-        return null;
+    public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDto loginRequestDto, HttpServletResponse res) {
+        String token = userService.login(loginRequestDto, res);
+        return ResponseEntity.ok("로그인 성공");
     }
 
 
