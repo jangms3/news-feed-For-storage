@@ -1,8 +1,8 @@
 package com.sparta.newsfeed.feed.service;
 
+import com.sparta.newsfeed.entity.Feed;
 import com.sparta.newsfeed.feed.dto.FeedRequest;
 import com.sparta.newsfeed.feed.dto.FeedResponse;
-import com.sparta.newsfeed.entity.Feed;
 import com.sparta.newsfeed.feed.repository.FeedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class FeedService {
     }
 
     @Transactional
-    public void updateFeed(Long id, FeedRequest requestDto) {
+    public FeedResponse updateFeed(Long id, FeedRequest requestDto) {
         // 해당 댓글이 DB에 존재하는지 확인
         Feed feed = feedRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 피드가 DB에 존재하지 않습니다."));
 
@@ -40,7 +40,7 @@ public class FeedService {
         feed.update(requestDto.getContent());
 
         // Entity -> ResponseDTO
-//        return feed.to(); // DTO 반환할 경우
+        return feed.to(); // DTO 반환할 경우
     }
 
     @Transactional

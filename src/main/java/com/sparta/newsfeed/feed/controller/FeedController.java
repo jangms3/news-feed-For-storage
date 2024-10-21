@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-//@RequestMapping("/")
+@RequestMapping("/")
 public class FeedController {
     private final FeedService feedService;
 
     // CREATE
-    @PostMapping("/feeds/")
+    @PostMapping("api/feeds")
     public ResponseEntity<FeedResponse> createFeed(@RequestBody @Valid FeedRequest requestDto) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -24,7 +24,7 @@ public class FeedController {
     }
 
     // READ selected feed
-    @GetMapping("/feeds/{feedId}")
+    @GetMapping("api/feeds/{feedId}")
     public ResponseEntity<FeedResponse> readFeed(@PathVariable("feedId") Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -32,15 +32,16 @@ public class FeedController {
     }
 
     // UPDATE
-    @PutMapping("/feeds/{feedId}")
-    public ResponseEntity<Void> updateFeed(@PathVariable("feedId") Long id, @RequestBody @Valid FeedRequest requestDto) {
+    @PutMapping("api/feeds/{feedId}")
+    public ResponseEntity<FeedResponse> updateFeed(@PathVariable("feedId") Long id, @RequestBody @Valid FeedRequest requestDto) {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
-                .build();
+                .body(feedService.updateFeed(id, requestDto));
+//                .build();
     }
 
     // DELETE
-    @DeleteMapping("/feeds/{feedId}")
+    @DeleteMapping("api/feeds/{feedId}")
     public ResponseEntity<Void> deleteFeed(@PathVariable("feedId") Long id) {
         feedService.deleteFeed(id);
         return ResponseEntity
