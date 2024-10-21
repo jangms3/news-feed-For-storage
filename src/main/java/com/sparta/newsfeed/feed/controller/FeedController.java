@@ -50,7 +50,6 @@ public class FeedController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .body(feedService.updateFeed(id, requestDto));
-//                .build();
     }
 
     // DELETE

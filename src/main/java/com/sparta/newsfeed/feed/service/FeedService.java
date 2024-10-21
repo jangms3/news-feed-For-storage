@@ -37,7 +37,7 @@ public class FeedService {
     }
 
     public FeedResponse readFeed(Long id) {
-        // 해당 일정이 DB에 존재하는지 확인
+        // 해당 피드가 DB에 존재하는지 확인
         Feed readFeed = feedRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 피드가 DB에 존재하지 않습니다."));
 
         // Entity -> ResponseDTO
@@ -46,7 +46,7 @@ public class FeedService {
 
     @Transactional
     public FeedResponse updateFeed(Long id, FeedRequest requestDto) {
-        // 해당 댓글이 DB에 존재하는지 확인
+        // 해당 피드가 DB에 존재하는지 확인
         Feed feed = feedRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 피드가 DB에 존재하지 않습니다."));
 
         // RequestDTO -> Entity
@@ -58,7 +58,7 @@ public class FeedService {
 
     @Transactional
     public void deleteFeed(Long id) {
-        // 해당 댓글이 DB에 존재하는지 확인
+        // 해당 피드가 DB에 존재하는지 확인
         Feed feed = feedRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 피드가 DB에 존재하지 않습니다."));
 
         feedRepository.delete(feed);
