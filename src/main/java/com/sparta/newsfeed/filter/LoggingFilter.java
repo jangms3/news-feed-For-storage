@@ -10,7 +10,7 @@ import java.io.IOException;
 
 
 @Slf4j(topic = "LoggingFilter")
-@Component
+//@Component
 @Order(1)
 public class LoggingFilter implements Filter {
     @Override
@@ -21,8 +21,4 @@ public class LoggingFilter implements Filter {
         chain.doFilter(request, response);
         log.info("비즈니스 로직 완료");
     }
-
-
-
-
 }
