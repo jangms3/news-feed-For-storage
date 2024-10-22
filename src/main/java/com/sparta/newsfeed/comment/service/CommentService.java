@@ -21,6 +21,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
+
     // 영속성 전이 강의 한번 더 들어봐야 겠다.
     @Transactional
     public CommentResponseDto createComment(CommentRequestDto requestDto, Long feedId, Long userId) {
@@ -40,7 +41,6 @@ public class CommentService {
         return new CommentResponseDto(savedComment);
     }
 
-    @Transactional
     public void updateComment(CommentRequestDto requestDto, Long feedId, Long commentId, Long userId) {
         // Feed와 Comment를 각각 조회
         Comment comment = commentRepository.findCommentById(commentId);
