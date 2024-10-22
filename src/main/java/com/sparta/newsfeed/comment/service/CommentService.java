@@ -22,11 +22,11 @@ public class CommentService {
 
     @Transactional
     public CommentResponseDto createComment(CommentRequestDto requestDto, Long feedId, Long userId) {
-        Feed feed = feedRepository.findById(feedId); //pk 기준으로 찾을꺼면 findById  쓰면 됨.
+        Feed feed = feedRepository.findById(feedId)
+                .orElseThrow(() -> new IllegalArgumentException("feed not found"));//pk 기준으로 찾을꺼면 findById  쓰면 됨.
         Users users = userRepository.findById(userId) //user 테이블이랑 repository랑 맵핑이 되어있음.
                 // findByid 는 user의 pk 값이 되는 아이디를 기준으로 찾는 다는 의미.
                 .orElseThrow(() -> new IllegalArgumentException("User not found")); //optional 한 객체를 내려준다.
-
 
         // 새로운 댓글 생성
         Comment comment = Comment.from(requestDto, feed, users);

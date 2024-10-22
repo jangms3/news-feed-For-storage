@@ -1,3 +1,5 @@
+package com.sparta.newsfeed.comment.controller;
+
 import com.sparta.newsfeed.comment.dto.CommentRequestDto;
 import com.sparta.newsfeed.comment.dto.CommentResponseDto;
 import com.sparta.newsfeed.comment.service.CommentService;
@@ -38,7 +40,6 @@ public class CommentController {
         CommentResponseDto newComment = commentService.createComment(requestDto, feedId, userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newComment);
-       // 생성된 댓글 반환
     }
 
     // JWT 토큰을 쿠키에서 추출하는 메서드

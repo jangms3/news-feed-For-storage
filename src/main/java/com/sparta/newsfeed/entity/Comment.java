@@ -30,6 +30,8 @@ public class Comment {
     @Column(nullable = false)
     private String comment;
 
+    public static Comment from(CommentRequestDto requestDto, Feed feed, Users users) {
+    }
 
     // 댓글 데이터 수정
     public void updateComment(String Comment) {
