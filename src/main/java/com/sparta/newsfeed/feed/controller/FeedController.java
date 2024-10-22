@@ -45,7 +45,7 @@ public class FeedController {
     @PutMapping("api/feeds/{feedId}")
     public ResponseEntity<FeedResponse> updateFeed(@PathVariable("feedId") Long id, @RequestBody @Valid FeedRequest requestDto) {
         return ResponseEntity
-                .status(HttpStatus.NO_CONTENT)
+                .status(HttpStatus.RESET_CONTENT)
                 .body(feedService.updateFeed(id, requestDto));
     }
 
