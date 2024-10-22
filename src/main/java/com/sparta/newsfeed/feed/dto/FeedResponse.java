@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class FeedResponse {
     private Long id;
+    private String writer;
     private String content;
 //    private Integer likes;
     private LocalDateTime createdAt;

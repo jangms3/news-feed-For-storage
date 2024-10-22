@@ -5,34 +5,45 @@ import com.sparta.newsfeed.feed.dto.FeedResponse;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "feeds")
 @NoArgsConstructor
 public class Feed extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "feed_id")
     private Long id;
 
     @Column(nullable = false)
     private String content;
 
 //    @Column(nullable = false)
-//    private Integer likes;
+//    private Long likes;
 
-    public Feed(String content) {
-//        this.likes = 0;
+    // **** 유저와의 다대일 관계 ****
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Users user;
+
+
+    public Feed(Long userId, String content) {
+        this.user.setId(userId);
+//        this.likes = 0L;
         this.content = content;
     }
 
-    public static Feed from(FeedRequest requestDto) {
-        return new Feed(requestDto.getContent());
+    public static Feed from(Long userId, FeedRequest requestDto) {
+        return new Feed(userId, requestDto.getContent());
     }
 
-    public FeedResponse toEntity() {
+    public FeedResponse to() {
         return new FeedResponse(
                 getId(),
+                getUser().getUsername(),
                 getContent(),
 //                getLikes(),
                 getCreatedAt(),
