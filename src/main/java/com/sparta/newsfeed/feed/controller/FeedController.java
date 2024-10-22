@@ -26,7 +26,7 @@ public class FeedController {
     }
 
     // READ all feeds
-    @GetMapping("api/feeds}")
+    @GetMapping("")
     public ResponseEntity<List<FeedResponse>> readAllFeeds() {
         return ResponseEntity
                 .status(HttpStatus.OK)
