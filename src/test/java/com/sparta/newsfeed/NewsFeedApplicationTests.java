@@ -9,4 +9,8 @@ class NewsFeedApplicationTests {
     @Test
     void contextLoads() {
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 }

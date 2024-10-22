@@ -36,5 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 
-### DB 설정 정보 ###
+### 민감 정보 ###
 src/main/resources/application-secret.properties
