@@ -3,6 +3,7 @@ package com.sparta.newsfeed.feed.controller;
 import com.sparta.newsfeed.feed.dto.FeedRequest;
 import com.sparta.newsfeed.feed.dto.FeedResponse;
 import com.sparta.newsfeed.feed.service.FeedService;
+import com.sparta.newsfeed.util.JwtUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,16 +17,22 @@ import java.util.List;
 @RequestMapping("/")
 public class FeedController {
     private final FeedService feedService;
+    private final JwtUtil jwtUtil;
 
     // CREATE
     @PostMapping("api/feeds")
-    public ResponseEntity<FeedResponse> createFeed(@RequestBody @Valid FeedRequest requestDto) {
+    public ResponseEntity<FeedResponse> createFeed(
+            @CookieValue(value = "Authorization") String tokenValue,
+            @RequestBody @Valid FeedRequest requestDto
+    ) {
+        Long userId = jwtUtil.getUserIdFromToken(tokenValue);
+        FeedResponse responseDto = feedService.createFeed(userId, requestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(feedService.createFeed(requestDto));
+                .body(responseDto);
     }
 
-    // READ all feeds (Home)
+    // READ all feeds
     @GetMapping("")
     public ResponseEntity<List<FeedResponse>> readAllFeeds() {
         return ResponseEntity
@@ -43,16 +50,26 @@ public class FeedController {
 
     // UPDATE
     @PutMapping("api/feeds/{feedId}")
-    public ResponseEntity<FeedResponse> updateFeed(@PathVariable("feedId") Long id, @RequestBody @Valid FeedRequest requestDto) {
+    public ResponseEntity<FeedResponse> updateFeed(
+            @CookieValue(value = "Authorization") String tokenValue,
+            @PathVariable("feedId") Long id,
+            @RequestBody @Valid FeedRequest requestDto
+    ) {
+        Long idFromToken = jwtUtil.getUserIdFromToken(tokenValue);
+        FeedResponse responseDto = feedService.updateFeed(id, idFromToken, requestDto);
         return ResponseEntity
-                .status(HttpStatus.RESET_CONTENT)
-                .body(feedService.updateFeed(id, requestDto));
+            .status(HttpStatus.RESET_CONTENT)
+                .body(responseDto);
     }
 
     // DELETE
     @DeleteMapping("api/feeds/{feedId}")
-    public ResponseEntity<Void> deleteFeed(@PathVariable("feedId") Long id) {
-        feedService.deleteFeed(id);
+    public ResponseEntity<Void> deleteFeed(
+            @CookieValue(value = "Authorization") String tokenValue,
+            @PathVariable("feedId") Long id
+    ) {
+        Long idFromToken = jwtUtil.getUserIdFromToken(tokenValue);
+        feedService.deleteFeed(id, idFromToken);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();

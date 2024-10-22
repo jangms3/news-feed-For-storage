@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -17,47 +16,46 @@ public class FeedService {
     private final FeedRepository feedRepository;
 
     @Transactional
-    public FeedResponse createFeed(FeedRequest requestDto) {
-        // RequestDTO -> Entity
-        // DB 저장
-        Feed savedFeed = feedRepository.save(Feed.from(requestDto));
+    public FeedResponse createFeed(Long userId, FeedRequest requestDto) {
+        Feed savedFeed = feedRepository.save(Feed.from(userId, requestDto));
 
-        // Entity -> ResponseDTO
-        return savedFeed.toEntity();
+        return savedFeed.to();
     }
 
     public List<FeedResponse> readAllFeeds() {
         List<Feed> feeds = feedRepository.findAllByOrderByCreatedAtDesc();
 
-        return feeds.stream()
-                .map(Feed::toEntity)
-                .collect(Collectors.toList());
+        return feeds.stream().map(Feed::to).toList();
     }
 
     public FeedResponse readFeed(Long id) {
-        // 해당 피드가 DB에 존재하는지 확인
         Feed readFeed = feedRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 피드가 DB에 존재하지 않습니다."));
 
-        // Entity -> ResponseDTO
-        return readFeed.toEntity();
+        return readFeed.to();
     }
 
     @Transactional
-    public FeedResponse updateFeed(Long id, FeedRequest requestDto) {
-        // 해당 피드가 DB에 존재하는지 확인
+    public FeedResponse updateFeed(Long id, Long idFromToken, FeedRequest requestDto) {
         Feed feed = feedRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 피드가 DB에 존재하지 않습니다."));
 
-        // RequestDTO -> Entity
+        // 해당 피드의 유저 ID와 토큰의 유저 ID 체크
+        if (!idFromToken.equals(feed.getUser().getId())) {
+            throw new IllegalArgumentException("해당 피드의 작성자가 아닙니다.");
+        }
+
         feed.update(requestDto.getContent());
 
-        // Entity -> ResponseDTO
-        return feed.toEntity(); // DTO 반환할 경우
+        return feed.to();
     }
 
     @Transactional
-    public void deleteFeed(Long id) {
-        // 해당 피드가 DB에 존재하는지 확인
+    public void deleteFeed(Long id, Long idFromToken) {
         Feed feed = feedRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 피드가 DB에 존재하지 않습니다."));
+
+        // 해당 피드의 유저 ID와 토큰의 유저 ID 체크
+        if (!idFromToken.equals(feed.getUser().getId())) {
+            throw new IllegalArgumentException("해당 피드의 작성자가 아닙니다.");
+        }
 
         feedRepository.delete(feed);
     }
