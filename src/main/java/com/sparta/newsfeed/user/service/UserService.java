@@ -41,7 +41,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public String login(LoginRequestDto loginRequestDto, HttpServletResponse res) {
+    public void login(LoginRequestDto loginRequestDto, HttpServletResponse res) {
         String username = loginRequestDto.getUsername();
         String password = loginRequestDto.getPassword();
         Users user = userRepository.findByUsername(username).orElseThrow(() ->
@@ -52,7 +52,6 @@ public class UserService {
         }
         String token = jwtUtil.createToken(user.getUsername(), user.getRole());
         jwtUtil.addJwtCookie(token, res);
-        return token;
     }
 
     public MyProfileResponseDto getMyProfile(Long userId) {
