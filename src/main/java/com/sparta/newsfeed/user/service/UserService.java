@@ -15,9 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.sparta.newsfeed.entity.UserRoleEnum.ROLE_ADMIN;
-import static com.sparta.newsfeed.entity.UserRoleEnum.ROLE_USER;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -35,9 +32,9 @@ public class UserService {
 
         UserRoleEnum checkedRole;
         if (role) {
-            checkedRole = ROLE_USER;
+            checkedRole = UserRoleEnum.ADMIN;
         } else {
-            checkedRole = ROLE_ADMIN;
+            checkedRole = UserRoleEnum.USER;
         }
 
         Users user = new Users(username, password, email, checkedRole);

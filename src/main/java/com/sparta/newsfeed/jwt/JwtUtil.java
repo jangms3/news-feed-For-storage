@@ -23,9 +23,9 @@ import java.util.Date;
 @Component
 public class JwtUtil {
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String AUTHORIZATION_KEY = "auth";
+    public static final String AUTHORIZATION_KEY = "auth"; // 사용되는 부분 없음 제거해도 되나?
     public static final String BEARER_PREFIX = "Bearer ";
-    public final Long TOKEN_TIME = 60 * 60 * 1000L;
+    public final Long TOKEN_TIME = 60 * 60 * 1000L; // 1시간
 
     @Value("${jwt.secret.key}")
     private String secretKey;

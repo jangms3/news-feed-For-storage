@@ -29,24 +29,27 @@ public class AuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String tokenValue = jwtUtil.getTokenFromRequest(httpServletRequest);
+        String urI = httpServletRequest.getRequestURI();
 
-        // 인증이 필요없는 URL 패턴 추가 예정
-        // 홈 화면 (로그인하지 않고, 전체 피드 보기)
-
-        if (StringUtils.hasText(tokenValue)) {
-            String token = jwtUtil.substringToken(tokenValue);
-            if (!jwtUtil.validateToken(token)) {
-                throw new IllegalArgumentException("Token Error");
-            }
-            Claims info = jwtUtil.getUserInfoFromToken(token);
-            Users user = userRepository.findByUsername(info.getSubject()).orElseThrow(() ->
-                    new NullPointerException("유저를 찾을 수 없습니다.")
-            );
-            request.setAttribute("user", user);
+        // 인증이 필요없는 URL
+        if(StringUtils.hasText(urI) && urI.startsWith("/api/user/signup") || urI.startsWith("/api/user/login")) {
             chain.doFilter(request, response);
         } else {
-            throw new IllegalArgumentException("토큰을 찾을 수 없습니다.");
+            String tokenValue = jwtUtil.getTokenFromRequest(httpServletRequest);
+            if (StringUtils.hasText(tokenValue)) {
+                String token = jwtUtil.substringToken(tokenValue);
+                if (!jwtUtil.validateToken(token)) {
+                    throw new IllegalArgumentException("Token Error");
+                }
+                Claims info = jwtUtil.getUserInfoFromToken(token);
+                Users user = userRepository.findByUsername(info.getSubject()).orElseThrow(() ->
+                        new NullPointerException("유저를 찾을 수 없습니다.")
+                );
+                request.setAttribute("user", user);
+                chain.doFilter(request, response);
+            } else {
+                throw new IllegalArgumentException("토큰을 찾을 수 없습니다.");
+            }
         }
     }
 }
