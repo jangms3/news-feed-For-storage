@@ -44,6 +44,17 @@ public class CommentController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)  // 201 Created 상태 반환
                 .body(newComment);  // 생성된 댓글 반환
+
+        private String getJwtFromCookies(HttpServletRequest request) {
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if ("jwtToken".equals(cookie.getName())) {
+                        return cookie.getValue();
+                    }
+                }
+            }
+            return null; // 쿠키에서 토큰이 없으면 null
     }
 
     //댓글 조회
