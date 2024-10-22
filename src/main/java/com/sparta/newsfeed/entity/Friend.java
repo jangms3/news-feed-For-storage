@@ -2,12 +2,15 @@ package com.sparta.newsfeed.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.mapping.ToOne;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Friends")
 @NoArgsConstructor
+@Getter
+@Setter
 public class Friend extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,12 +32,4 @@ public class Friend extends Timestamped {
         this.toUser = toUser;
         this.status = status;
     }
-
-    public void acceptFriendRequest() {
-        status = FriendshipStatus.ACCEPT;
-    }
-
-
-
-
 }

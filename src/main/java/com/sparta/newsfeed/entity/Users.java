@@ -34,8 +34,11 @@ public class Users extends Timestamped {
     @Column
     private String introduction;
 
-    @OneToMany(mappedBy = "friend")
-    private List<Friend> friendList = new ArrayList<>();
+    @OneToMany(mappedBy = "fromUser")
+    private List<Friend> fromfriendList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toUser")
+    private List<Friend> tofriendList = new ArrayList<>();
 
     public Users(String username, String password, String email, UserRoleEnum role) {
         this.username = username;

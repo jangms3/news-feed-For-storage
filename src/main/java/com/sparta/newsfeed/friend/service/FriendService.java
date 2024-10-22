@@ -3,6 +3,7 @@ package com.sparta.newsfeed.friend.service;//package com.sparta.newsfeed.friend.
 import com.sparta.newsfeed.entity.Friend;
 import com.sparta.newsfeed.entity.FriendshipStatus;
 import com.sparta.newsfeed.entity.Users;
+import com.sparta.newsfeed.friend.dto.FriendResponseDto;
 import com.sparta.newsfeed.friend.repository.FriendRepository;
 import com.sparta.newsfeed.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -62,45 +63,46 @@ public class FriendService {
         friendRepository.deleteById(id);
     }
 
-    // 받은 친구요청 조회
-//    @Transactional
-//    public ResponseEntity<?> getWaitingFriendList() throws Exception {
-    // 현재 로그인한 유저의 정보를 불러온다
-    // --------------------------------------------------------------------------------//
-    // 로그인한 유저 정보를 넣기
-//        Users users = userRepository.findById(-----.getLoginId()).orElsethrow(() -> new Exception("회원 조회 실패"));
-//        List<Friend> friendsList = users.getFriendList();
-//
-//        //조회된 결과 객채를 담을 Dto 리스트
-//        List<WaitingFriendListDto> result = new ArrayList<>();
-//
-//        for (Friend x : friendsList) {
-//            // 수락 대기중인 요청만 조회
-//            if (!x.isFrom() && x.getStatus() == Friend.WATTING) {
-//                Users friend = usersRepository.findById(x.getId()).orElseThrow(() -> new Exception("회원 조회 실패"));
-//                WaitingFriendListDto dto = WaitingFriendListDto.builder()
-//                        .friendId(x.getId())
-//                        .friendEmail(friend.getEmail())
-//                        .friendName(friend.getName())
-//                        .status(x.getStatus())
-//                        .build();
-//                result.add(dto);
-//            }
-//        }
-//        // 결과 반환
-//        return new ResponseEntity<>(result, HttpStatus.OK);
-//    }
-//
-//    public String approveFriendRequest(Long id) throws Exception {
-//        // 누를 친구 요청과 매칭되는 상대방 친구 요청 둘다 가져옴
-//        Friend friend = friendRepository.findById(id).orElseThrow(() -> new Exception("친구 요청 조회 실패"));
-//        Friend counterFriend = friendRepository.findById(friend.getCounterpartId()).orElseThrow(() -> new Exception("친구 요청 조회"));
-//
-//        // 둘다 상태를 ACCEPT로 변경
-//        friend.acceptFriendRequest();
-//        counterFriend.acceptFriendRequest();
-//
-//        return "승인 성공" ;
-//    }
-//}
+//     대기 친구요청 조회
+    @Transactional
+    public List <FriendResponseDto> getWaitingFriendList() throws Exception {
+//     현재 로그인한 유저의 정보를 불러온다
+//     --------------------------------------------------------------------------------
+//     로그인한 유저 정보를 넣기
+        long userId = 1L;
+        Users users = userRepository.findById(userId).orElseThrow(()-> new Exception("회원 조회 실패"));
+        List<Friend> waitfriendsList = friendRepository.findByFromUserAndStatus(users, FriendshipStatus.RESPONSE_WAITING);
+        return waitfriendsList.stream()
+                .map(FriendResponseDto::to)
+                .toList();
+        //조회된 결과 객채를 담을 Dto 리스트
+        // 결과 반환
+    }
+
+    // 친구 목록 조회
+    @Transactional
+    public List <FriendResponseDto> getAcceptedFriendList() throws Exception {
+        long userId = 1L;
+        Users users = userRepository.findById(userId).orElseThrow(()-> new EntityNotFoundException("회원 조회 실패"));
+        List <Friend> friendsList = friendRepository.findByFromUserAndStatus(users, FriendshipStatus.ACCEPT);
+        return friendsList.stream()
+                .map(FriendResponseDto::to)
+                .toList();
+    }
+
+    @Transactional
+    public void approveFriendRequest(Long friendId) throws Exception {
+        // 누를 친구 요청과 매칭되는 상대방 친구 요청 둘다 가져옴
+        Long myId = 1L;
+        Users user = userRepository.findById(friendId).orElseThrow(() -> new Exception("친구 요청 조회 실패"));
+
+        friendRepository.findByFromUserIdAndToUserId(myId, friendId);
+
+        Friend myself = friendRepository.findByFromUserIdAndToUserId(myId, friendId).orElseThrow(() -> new Exception("친구로부터의 요청이 없습니다."));
+        Friend friend = friendRepository.findByFromUserIdAndToUserId(friendId, myId).orElseThrow(() -> new Exception("친구로부터의 요청이 없습니다."));
+
+        // 둘다 상태를 ACCEPT로 변경
+        myself.setStatus(FriendshipStatus.ACCEPT);
+        friend.setStatus(FriendshipStatus.ACCEPT);
+    }
 }
