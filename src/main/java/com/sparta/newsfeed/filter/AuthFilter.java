@@ -2,6 +2,7 @@ package com.sparta.newsfeed.filter;
 
 import com.sparta.newsfeed.entity.Users;
 import com.sparta.newsfeed.user.repository.UserRepository;
+import com.sparta.newsfeed.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
