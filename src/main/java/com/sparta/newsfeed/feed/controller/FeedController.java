@@ -25,15 +25,12 @@ public class FeedController {
                 .body(feedService.createFeed(requestDto));
     }
 
-    // READ
-    @GetMapping("api/feeds")
-    public ResponseEntity<List<FeedResponse>> readNextFeeds(
-            @RequestParam(required = false) Long lastCursorId,
-            @RequestParam(required = false, defaultValue = "10") Integer pageSize
-    ) {
+    // READ all feeds
+    @GetMapping("api/feeds}")
+    public ResponseEntity<List<FeedResponse>> readAllFeeds() {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(feedService.readNextFeeds(lastCursorId, pageSize));
+                .body(feedService.readAllFeeds());
     }
 
     // READ selected feed
@@ -59,6 +56,5 @@ public class FeedController {
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .build();
-
     }
 }

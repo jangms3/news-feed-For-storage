@@ -5,8 +5,6 @@ import com.sparta.newsfeed.feed.dto.FeedRequest;
 import com.sparta.newsfeed.feed.dto.FeedResponse;
 import com.sparta.newsfeed.feed.repository.FeedRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,9 +26,9 @@ public class FeedService {
         return savedFeed.toEntity();
     }
 
-    public List<FeedResponse> readNextFeeds(Long lastCursorId, Integer pageSize) {
-        Pageable pageable = PageRequest.of(0, pageSize);
-        List<Feed> feeds = feedRepository.findByIdGreaterThanOrderByIdAsc(lastCursorId, pageable);
+    public List<FeedResponse> readAllFeeds() {
+        List<Feed> feeds = feedRepository.findAllByOrderByCreatedAtDesc();
+
         return feeds.stream()
                 .map(Feed::toEntity)
                 .collect(Collectors.toList());
