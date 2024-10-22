@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class FeedResponse {
     private Long id;
     private String content;
-    private Long likes;
+//    private Integer likes;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 }

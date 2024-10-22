@@ -18,11 +18,11 @@ public class Feed extends Timestamped {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private Long likes;
+//    @Column(nullable = false)
+//    private Integer likes;
 
     public Feed(String content) {
-        this.likes = 0L;
+//        this.likes = 0;
         this.content = content;
     }
 
@@ -34,7 +34,7 @@ public class Feed extends Timestamped {
         return new FeedResponse(
                 getId(),
                 getContent(),
-                getLikes(),
+//                getLikes(),
                 getCreatedAt(),
                 getModifiedAt()
         );

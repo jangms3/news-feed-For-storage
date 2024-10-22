@@ -25,7 +25,7 @@ public class FeedController {
                 .body(feedService.createFeed(requestDto));
     }
 
-    // READ all feeds
+    // READ all feeds (Home)
     @GetMapping("")
     public ResponseEntity<List<FeedResponse>> readAllFeeds() {
         return ResponseEntity
