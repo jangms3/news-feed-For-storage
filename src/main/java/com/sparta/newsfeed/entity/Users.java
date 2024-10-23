@@ -29,6 +29,12 @@ public class Users extends Timestamp {
     private UserRoleEnum role;
 
     @Column
+    private boolean isVerified;
+
+    @Column
+    private Integer verificationCode;
+
+    @Column
     private String introduction;
 
     public Users(String username, String password, String email, UserRoleEnum role) {

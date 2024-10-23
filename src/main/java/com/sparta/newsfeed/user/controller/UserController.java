@@ -1,6 +1,5 @@
 package com.sparta.newsfeed.user.controller;
 
-import com.sparta.newsfeed.config.PasswordEncoder;
 import com.sparta.newsfeed.entity.Users;
 import com.sparta.newsfeed.user.otherDto.MyProfileResponseDto;
 import com.sparta.newsfeed.user.otherDto.ProfileResponseDto;
@@ -12,35 +11,28 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup (@RequestBody @Valid SignupRequestDto requestDto) {
-        String username = requestDto.getUsername();
-        String pw = passwordEncoder.encode(requestDto.getPassword());
-        String email = requestDto.getEmail();
-        boolean role = requestDto.isRole();
-
-        userService.signup(username, pw, email, role);
+        // 규모가 크다면 계층 간의 dto를 따로 만든다. 규모가 작다면 파라미터 하나씩 넘기는 것도 좋다.
+        userService.signup(requestDto.getUsername(), requestDto.getPassword(), requestDto.getEmail(), requestDto.isRole());
         return ResponseEntity.ok("회원 가입 성공");
     }
 
     @GetMapping("/profile/my")
     @ResponseBody
     public MyProfileResponseDto getMyProfile (HttpServletRequest request) {
-        // 한비님, 필터에서 HttpServletRequest 에 setAttribute 해주세요
+        // 한비님, 필터에서 HttpServletRequest 에 setAttribute 해주세요. <- 시큐리티 사용하면 못 씀?
         Users user = (Users) request.getAttribute("user");
-        Long Userid = user.getId();
-        return userService.getMyProfile(Userid);
+        return userService.getMyProfile(user.getId());
     }
 
     @GetMapping("/profile/{userId}")
@@ -52,9 +44,7 @@ public class UserController {
     @GetMapping("/check")
     @ResponseBody
     public Boolean checkIdPw (@RequestBody UserCheckRequestDto requestDto) {
-        String email = requestDto.getEmail();
-        String password = requestDto.getPassword();
-        return userService.checkIdPw(email, password);
+        return userService.checkIdPw(requestDto.getEmail(), requestDto.getPassword());
     }
 
     @PatchMapping("/update/{userId}")

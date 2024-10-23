@@ -3,6 +3,7 @@ package com.sparta.newsfeed.user.service;
 import com.sparta.newsfeed.config.PasswordEncoder;
 import com.sparta.newsfeed.entity.UserRoleEnum;
 import com.sparta.newsfeed.entity.Users;
+import com.sparta.newsfeed.user.UsersUtil.UsersUtil;
 import com.sparta.newsfeed.user.otherDto.MyProfileResponseDto;
 import com.sparta.newsfeed.user.otherDto.ProfileResponseDto;
 import com.sparta.newsfeed.user.repository.UserRepository;
@@ -18,9 +19,11 @@ import static com.sparta.newsfeed.entity.UserRoleEnum.ROLE_USER;
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UsersUtil usersUtil;
 
-    public void signup(String username, String password, String email, boolean role) {
+    public void signup(String username, String pw, String email, boolean role) {
         checkUsername(username);
+        String password = passwordEncoder.encode(pw);
 
         Optional<Users> checkEmail = userRepository.findByEmail(email);
         if (checkEmail.isPresent()) {
@@ -39,11 +42,11 @@ public class UserService {
     }
 
     public MyProfileResponseDto getMyProfile(Long userId) {
-        return new MyProfileResponseDto(findById(userId));
+        return new MyProfileResponseDto(usersUtil.findById(userId));
     }
 
     public ProfileResponseDto getProfile(Long userId) {
-        return new ProfileResponseDto(findById(userId));
+        return new ProfileResponseDto(usersUtil.findById(userId));
     }
 
     public Boolean checkIdPw(String email, String password) {
@@ -59,13 +62,13 @@ public class UserService {
     @Transactional
     public void updateUser(Long userId, String username, String introduction) {
         checkUsername(username);
-        Users user = findById(userId);
+        Users user = usersUtil.findById(userId);
         user.setUsername(username);
         user.setIntroduction(introduction);
     }
 
     public void delete(Long userId) {
-        Users user = findById(userId);
+        Users user = usersUtil.findById(userId);
         userRepository.deleteById(user.getId());
     }
 
@@ -74,11 +77,5 @@ public class UserService {
         if (checkUsername.isPresent()) {
             throw new IllegalArgumentException("중복된 이름이 존재합니다.");
         }
-    }
-
-    private Users findById(Long Userid) {
-        return userRepository.findById(Userid).orElseThrow(() ->
-                new IllegalArgumentException("해당 사용자가 없습니다")
-        );
     }
 }
