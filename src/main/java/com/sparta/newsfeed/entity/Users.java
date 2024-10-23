@@ -36,7 +36,7 @@ public class Users extends Timestamped {
     private String introduction;
 
     // **** 피드와의 일대다 관계 ****
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "user")
     private List<Feed> feeds = new ArrayList<>();
 
     @OneToMany(mappedBy = "fromUser")
