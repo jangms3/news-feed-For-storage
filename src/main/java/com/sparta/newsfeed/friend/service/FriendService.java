@@ -21,12 +21,10 @@ public class FriendService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void createFriends(Long toId) throws Exception {
+    public void createFriends(Long toId, Users user) throws Exception {
 
         // 현재 로그인 되어 있는사람
-        // -----------------------------------------------------------------------//
-        // 회원으로 검증받은 id를 넣을것!
-        Long fromId = 1L;
+        Long fromId = user.getId();
 
         // 유저 정보를 모두 가져옴
         Users fromUser = userRepository.findById(fromId).orElseThrow(() -> new Exception("회원 조회 실패"));
@@ -53,30 +51,27 @@ public class FriendService {
 
     // 친구 삭제
     public void deleteFriends(Long id) {
-        Users user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
         friendRepository.deleteById(id);
     }
 
 //     대기 친구요청 조회
     @Transactional
-    public List <FriendResponseDto> getWaitingFriendList() throws Exception {
-//     현재 로그인한 유저의 정보를 불러온다
-//     --------------------------------------------------------------------------------
+    public List <FriendResponseDto> getWaitingFriendList(Users user) throws Exception {
 //     로그인한 유저 정보를 넣기
-        long userId = 1L;
+        Long userId = user.getId();
         Users users = userRepository.findById(userId).orElseThrow(()-> new Exception("회원 조회 실패"));
         List<Friend> waitfriendsList = friendRepository.findByFromUserAndStatus(users, FriendshipStatus.RESPONSE_WAITING);
         return waitfriendsList.stream()
                 .map(FriendResponseDto::to)
                 .toList();
-        //조회된 결과 객채를 담을 Dto 리스트
-        // 결과 반환
     }
 
     // 친구 목록 조회
     @Transactional
-    public List <FriendResponseDto> getAcceptedFriendList() throws Exception {
-        long userId = 1L;
+    public List <FriendResponseDto> getAcceptedFriendList(Users user) throws Exception {
+        // 로그인한 유저 정보를 넣기
+        Long userId = user.getId();
         Users users = userRepository.findById(userId).orElseThrow(()-> new EntityNotFoundException("회원 조회 실패"));
         List <Friend> friendsList = friendRepository.findByFromUserAndStatus(users, FriendshipStatus.ACCEPT);
         return friendsList.stream()
@@ -85,10 +80,10 @@ public class FriendService {
     }
 
     @Transactional
-    public void approveFriendRequest(Long friendId) throws Exception {
+    public void approveFriendRequest(Long friendId, Users user) throws Exception {
         // 누를 친구 요청과 매칭되는 상대방 친구 요청 둘다 가져옴
-        Long myId = 1L;
-        Users user = userRepository.findById(friendId).orElseThrow(() -> new Exception("친구 요청 조회 실패"));
+        Long myId = user.getId();
+        userRepository.findById(friendId).orElseThrow(() -> new Exception("친구 요청 조회 실패"));
 
         friendRepository.findByFromUserIdAndToUserId(myId, friendId);
 
