@@ -45,7 +45,7 @@ public class AuthFilter implements Filter {
                     throw new IllegalArgumentException("Token Error");
                 }
                 Claims info = jwtUtil.getUserInfoFromToken(token);
-                Users user = userRepository.findByUsername(info.getSubject()).orElseThrow(() ->
+                Users user = userRepository.findByEmail(info.getSubject()).orElseThrow(() ->
                         new NullPointerException("유저를 찾을 수 없습니다.")
                 );
                 request.setAttribute("user", user);
