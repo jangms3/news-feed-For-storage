@@ -10,6 +10,9 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -32,9 +35,8 @@ public class Feed extends Timestamped {
     @JoinColumn(name = "user_id")
     private Users user;
 
-    @OneToMany(mappedBy = "feed")
-    private List<Feed> comments = new ArrayList<>();
-
+    @OneToMany(mappedBy = "feed", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public Feed(Users user, String content) {
         this.user = user;

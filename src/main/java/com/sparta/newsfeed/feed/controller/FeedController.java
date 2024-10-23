@@ -32,7 +32,7 @@ public class FeedController {
                 .body(responseDto);
     }
 
-    // READ all feeds
+    // READ all feed
     @GetMapping("api/feeds")
     public ResponseEntity<List<FeedResponse>> readAllFeed() {
         return ResponseEntity
