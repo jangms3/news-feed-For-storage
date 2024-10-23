@@ -35,11 +35,11 @@ public class FeedService {
     }
 
     @Transactional
-    public FeedResponse updateFeed(Long id, Long idFromToken, FeedRequest requestDto) {
+    public FeedResponse updateFeed(Long id, Long userIdFromToken, FeedRequest requestDto) {
         Feed feed = feedRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 피드가 DB에 존재하지 않습니다."));
 
         // 해당 피드의 유저 ID와 토큰의 유저 ID 체크
-        if (!idFromToken.equals(feed.getUser().getId())) {
+        if (!userIdFromToken.equals(feed.getUser().getId())) {
             throw new IllegalArgumentException("해당 피드의 작성자가 아닙니다.");
         }
 
@@ -49,11 +49,11 @@ public class FeedService {
     }
 
     @Transactional
-    public void deleteFeed(Long id, Long idFromToken) {
+    public void deleteFeed(Long id, Long userIdFromToken) {
         Feed feed = feedRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 피드가 DB에 존재하지 않습니다."));
 
         // 해당 피드의 유저 ID와 토큰의 유저 ID 체크
-        if (!idFromToken.equals(feed.getUser().getId())) {
+        if (!userIdFromToken.equals(feed.getUser().getId())) {
             throw new IllegalArgumentException("해당 피드의 작성자가 아닙니다.");
         }
 
