@@ -4,11 +4,13 @@ import com.sparta.newsfeed.config.PasswordEncoder;
 import com.sparta.newsfeed.entity.Users;
 import com.sparta.newsfeed.user.otherDto.MyProfileResponseDto;
 import com.sparta.newsfeed.user.otherDto.ProfileResponseDto;
+import com.sparta.newsfeed.user.requestDto.LoginRequestDto;
 import com.sparta.newsfeed.user.requestDto.SignupRequestDto;
 import com.sparta.newsfeed.user.requestDto.UserCheckRequestDto;
 import com.sparta.newsfeed.user.requestDto.UserUpdateRequestDto;
 import com.sparta.newsfeed.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,13 @@ public class UserController {
         userService.signup(username, pw, email, role);
         return ResponseEntity.ok("회원 가입 성공");
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDto loginRequestDto, HttpServletResponse res) {
+        userService.login(loginRequestDto, res);
+        return ResponseEntity.ok("로그인 성공");
+    }
+
 
     @GetMapping("/profile/my")
     @ResponseBody
