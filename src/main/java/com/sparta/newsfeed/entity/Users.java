@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table
 @Getter
 @Setter
-@Table
 @NoArgsConstructor
 public class Users extends Timestamped {
     @Id
@@ -38,6 +38,12 @@ public class Users extends Timestamped {
     // **** 피드와의 일대다 관계 ****
     @OneToMany(mappedBy = "users")
     private List<Feed> feeds = new ArrayList<>();
+
+    @OneToMany(mappedBy = "fromUser")
+    private List<Friend> fromfriendList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toUser")
+    private List<Friend> tofriendList = new ArrayList<>();
 
     public Users(String username, String password, String email, UserRoleEnum role) {
         this.username = username;
