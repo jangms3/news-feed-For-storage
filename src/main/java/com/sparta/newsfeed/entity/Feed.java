@@ -10,9 +10,6 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @Setter
@@ -27,9 +24,6 @@ public class Feed extends Timestamped {
     @Column(nullable = false)
     private String content;
 
-//    @Column(nullable = false)
-//    private Long likes;
-
     // **** 유저와의 다대일 관계 ****
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -40,7 +34,6 @@ public class Feed extends Timestamped {
 
     public Feed(Users user, String content) {
         this.user = user;
-//        this.likes = 0L;
         this.content = content;
     }
 
@@ -53,7 +46,6 @@ public class Feed extends Timestamped {
                 getId(),
                 getUser().getUsername(),
                 getContent(),
-//                getLikes(),
                 getCreatedAt(),
                 getModifiedAt()
         );
