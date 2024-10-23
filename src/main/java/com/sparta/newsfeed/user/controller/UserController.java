@@ -3,11 +3,13 @@ package com.sparta.newsfeed.user.controller;
 import com.sparta.newsfeed.entity.Users;
 import com.sparta.newsfeed.user.otherDto.MyProfileResponseDto;
 import com.sparta.newsfeed.user.otherDto.ProfileResponseDto;
+import com.sparta.newsfeed.user.requestDto.LoginRequestDto;
 import com.sparta.newsfeed.user.requestDto.SignupRequestDto;
 import com.sparta.newsfeed.user.requestDto.UserCheckRequestDto;
 import com.sparta.newsfeed.user.requestDto.UserUpdateRequestDto;
 import com.sparta.newsfeed.user.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,15 +24,19 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup (@RequestBody @Valid SignupRequestDto requestDto) {
-        // 규모가 크다면 계층 간의 dto를 따로 만든다. 규모가 작다면 파라미터 하나씩 넘기는 것도 좋다.
         userService.signup(requestDto.getUsername(), requestDto.getPassword(), requestDto.getEmail(), requestDto.isRole());
         return ResponseEntity.ok("회원 가입 성공");
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody @Valid LoginRequestDto loginRequestDto, HttpServletResponse res) {
+        userService.login(loginRequestDto, res);
+        return ResponseEntity.ok("로그인 성공");
     }
 
     @GetMapping("/profile/my")
     @ResponseBody
     public MyProfileResponseDto getMyProfile (HttpServletRequest request) {
-        // 한비님, 필터에서 HttpServletRequest 에 setAttribute 해주세요. <- 시큐리티 사용하면 못 씀?
         Users user = (Users) request.getAttribute("user");
         return userService.getMyProfile(user.getId());
     }

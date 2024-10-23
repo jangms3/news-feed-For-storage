@@ -2,7 +2,6 @@ package com.sparta.newsfeed.user.UsersUtil;
 
 import com.sparta.newsfeed.entity.Users;
 import com.sparta.newsfeed.user.repository.UserRepository;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

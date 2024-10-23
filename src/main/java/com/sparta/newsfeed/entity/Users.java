@@ -5,12 +5,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table
 @Getter
 @Setter
 @NoArgsConstructor
-public class Users extends Timestamp {
+public class Users extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,6 +39,12 @@ public class Users extends Timestamp {
 
     @Column
     private String introduction;
+
+    @OneToMany(mappedBy = "fromUser")
+    private List<Friend> fromfriendList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toUser")
+    private List<Friend> tofriendList = new ArrayList<>();
 
     public Users(String username, String password, String email, UserRoleEnum role) {
         this.username = username;
