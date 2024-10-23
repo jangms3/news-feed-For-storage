@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -29,6 +32,8 @@ public class Feed extends Timestamped {
     @JoinColumn(name = "user_id")
     private Users user;
 
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public Feed(Users user, String content) {
         this.user = user;
@@ -37,6 +42,7 @@ public class Feed extends Timestamped {
     }
 
     public static Feed from(Users user, FeedRequest requestDto) {
+
         return new Feed(user, requestDto.getContent());
     }
 
@@ -52,6 +58,7 @@ public class Feed extends Timestamped {
     }
 
     public void update(String content) {
+
         this.content = content;
     }
 }

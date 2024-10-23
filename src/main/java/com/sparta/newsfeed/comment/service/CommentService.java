@@ -76,12 +76,12 @@ public class CommentService {
     @Transactional
     public List<CommentResponseDto> getCommentsByFeedId(Long feedId) {
         // Feed 조회
-         feedRepository.findById(feedId)
+
+        feedRepository.findById(feedId)
                 .orElseThrow(() -> new IllegalArgumentException("Feed not found"));
 
         // 해당 Feed에 달린 댓글 목록 조회
-        List<Comment> comments = commentRepository.findAllById(feedId);
-
+        List<Comment> comments = commentRepository.findAllByFeedIdOrderByCreatedAtDesc(feedId);
         return comments.stream()
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());

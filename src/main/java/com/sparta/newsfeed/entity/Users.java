@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.ArrayList;
-import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +45,10 @@ public class Users extends Timestamped {
     @OneToMany(mappedBy = "user")
     private List<Feed> feeds = new ArrayList<>();
 
-    @OneToMany(mappedBy = "fromUser")
+    @OneToMany(mappedBy = "fromUser",cascade = CascadeType.REMOVE, orphanRemoval = true )
     private List<Friend> fromfriendList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "toUser")
+    @OneToMany(mappedBy = "toUser",cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Friend> tofriendList = new ArrayList<>();
 
     public Users(String username, String password, String email, UserRoleEnum role) {

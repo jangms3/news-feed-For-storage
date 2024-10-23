@@ -11,5 +11,5 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
         return findById(id).orElseThrow(() -> new IllegalArgumentException("Comment not found with id: " + id));
     }
 
-    List<Comment> findAllById(Long id);
+    List<Comment> findAllByFeedIdOrderByCreatedAtDesc(Long feedId);
 }
