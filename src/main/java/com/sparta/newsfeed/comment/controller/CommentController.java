@@ -6,19 +6,21 @@ import com.sparta.newsfeed.comment.service.CommentService;
 import com.sparta.newsfeed.entity.Users;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/feeds/{feedId}/comments")
 @RequiredArgsConstructor
 public class CommentController {
 
     private final CommentService commentService;
-
+    
     // 댓글 생성
     @PostMapping
     public ResponseEntity<CommentResponseDto> createComment(@RequestBody CommentRequestDto requestDto,
@@ -40,15 +42,15 @@ public class CommentController {
 
     // 댓글 수정
     @PutMapping("/{commentId}")
-    public ResponseEntity<Void> updateComment(@RequestBody CommentRequestDto requestDto,
-                                              @PathVariable Long feedId,
-                                              @PathVariable Long commentId,
-                                              HttpServletRequest request) {
+    public ResponseEntity<CommentResponseDto> updateComment(@RequestBody CommentRequestDto requestDto,
+                                                            @PathVariable Long feedId,
+                                                            @PathVariable Long commentId,
+                                                            HttpServletRequest request) {
         Users authenticatedUser = (Users) request.getAttribute("user");
 
         // 댓글 수정 로직 처리
-        commentService.updateComment(requestDto, feedId, commentId, authenticatedUser.getId());
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        CommentResponseDto updatedComment = commentService.updateComment(requestDto, feedId, commentId, authenticatedUser.getId());
+        return ResponseEntity.ok(updatedComment);
     }
 
     // 댓글 삭제

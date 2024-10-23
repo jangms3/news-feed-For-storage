@@ -10,11 +10,13 @@ import com.sparta.newsfeed.feed.repository.FeedRepository;
 import com.sparta.newsfeed.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class CommentService {
@@ -41,7 +43,7 @@ public class CommentService {
         return new CommentResponseDto(savedComment);
     }
 
-    public void updateComment(CommentRequestDto requestDto, Long feedId, Long commentId, Long userId) {
+    public CommentResponseDto updateComment(CommentRequestDto requestDto, Long feedId, Long commentId, Long userId) {
         // Feed와 Comment를 각각 조회
         Comment comment = commentRepository.findCommentById(commentId);
         Feed feed = comment.getFeed();
@@ -53,12 +55,15 @@ public class CommentService {
 
         // 댓글 내용 수정
         comment.updateComment(requestDto.getComment());
+
+        return null;
     }
 
     @Transactional
     public void deleteComment(Long feedId, Long commentId, Long userId) {
         // Feed와 Comment를 각각 조회
         Comment comment = commentRepository.findCommentById(commentId);
+        Feed feed = comment.getFeed();
 
         // 권한 확인 (댓글 작성자와 삭제하려는 사용자가 동일한지 확인)
         if (!comment.getUsers().getId().equals(userId)) {
