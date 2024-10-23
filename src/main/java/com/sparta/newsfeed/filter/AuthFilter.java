@@ -1,8 +1,8 @@
 package com.sparta.newsfeed.filter;
 
 import com.sparta.newsfeed.entity.Users;
+import com.sparta.newsfeed.jwt.JwtUtil;
 import com.sparta.newsfeed.user.repository.UserRepository;
-import com.sparta.newsfeed.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,9 +32,15 @@ public class AuthFilter implements Filter {
         String url = httpServletRequest.getRequestURI();
         String method = httpServletRequest.getMethod();
 
+        // 인증이 필요없는 URL
+        // READ all feeds
+        // GET /api/feeds/{feedId}
+        // signup
+        // login
         if ( StringUtils.hasText(url) &&
                 ( url.equals("/") ||
-                        ( url.equals("/api/feeds/{feedId}") && method.equals("GET") )
+                        ( url.equals("/api/feeds/{feedId}") && method.equals("GET") ) ||
+                        url.startsWith("/api/user/signup") || url.startsWith("/api/user/login")
                 )
         ) {
             // 해당 API 요청은 인증 필요없이 요청 진행
@@ -57,15 +63,14 @@ public class AuthFilter implements Filter {
                 Claims info = jwtUtil.getUserInfoFromToken(token);
 
                 Users user = userRepository.findByUsername(info.getSubject()).orElseThrow(() ->
-                        new NullPointerException("Not Found User")
+                        new NullPointerException("유저를 찾을 수 없습니다.")
                 );
 
                 request.setAttribute("user", user);
                 chain.doFilter(request, response); // 다음 Filter 로 이동
             } else {
-                throw new IllegalArgumentException("Not Found Token");
+                throw new IllegalArgumentException("토큰을 찾을 수 없습니다.");
             }
         }
     }
-
 }
