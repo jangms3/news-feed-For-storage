@@ -23,16 +23,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-    private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup (@RequestBody @Valid SignupRequestDto requestDto) {
-        String username = requestDto.getUsername();
-        String pw = passwordEncoder.encode(requestDto.getPassword());
-        String email = requestDto.getEmail();
-        boolean role = requestDto.isRole();
-
-        userService.signup(username, pw, email, role);
+        userService.signup(requestDto.getUsername(), requestDto.getPassword(),
+                requestDto.getEmail(), requestDto.isRole());
         return ResponseEntity.ok("회원 가입 성공");
     }
 
@@ -46,10 +41,8 @@ public class UserController {
     @GetMapping("/profile/my")
     @ResponseBody
     public MyProfileResponseDto getMyProfile (HttpServletRequest request) {
-        // 한비님, 필터에서 HttpServletRequest 에 setAttribute 해주세요
         Users user = (Users) request.getAttribute("user");
-        Long Userid = user.getId();
-        return userService.getMyProfile(Userid);
+        return userService.getMyProfile(user.getId());
     }
 
     @GetMapping("/profile/{userId}")
@@ -61,9 +54,7 @@ public class UserController {
     @GetMapping("/check")
     @ResponseBody
     public Boolean checkIdPw (@RequestBody UserCheckRequestDto requestDto) {
-        String email = requestDto.getEmail();
-        String password = requestDto.getPassword();
-        return userService.checkIdPw(email, password);
+        return userService.checkIdPw(requestDto.getEmail(), requestDto.getPassword());
     }
 
     @PatchMapping("/update/{userId}")
