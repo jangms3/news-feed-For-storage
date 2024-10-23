@@ -33,11 +33,11 @@ public class FeedController {
     }
 
     // READ all feeds
-    @GetMapping("")
-    public ResponseEntity<List<FeedResponse>> readAllFeeds() {
+    @GetMapping("api/feeds")
+    public ResponseEntity<List<FeedResponse>> readAllFeed() {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(feedService.readAllFeeds());
+                .body(feedService.readAllFeed());
     }
 
     // READ selected feed
@@ -47,6 +47,16 @@ public class FeedController {
                 .status(HttpStatus.OK)
                 .body(feedService.readFeed(id));
     }
+
+    // READ friends' feeds
+//    @GetMapping("api/friends-feeds")
+//    public ResponseEntity<List<FeedResponse>> readFriendsFeed(HttpServletRequest request) {
+//        Users user = (Users) request.getAttribute("user");
+//
+//        return ResponseEntity
+//                .status(HttpStatus.OK)
+//                .body(feedService.readFriendsFeed(user));
+//    }
 
     // UPDATE
     @PutMapping("api/feeds/{feedId}")

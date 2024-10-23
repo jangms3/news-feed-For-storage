@@ -23,10 +23,10 @@ public class FeedService {
         return savedFeed.to();
     }
 
-    public List<FeedResponse> readAllFeeds() {
-        List<Feed> feeds = feedRepository.findAllByOrderByCreatedAtDesc();
+    public List<FeedResponse> readAllFeed() {
+        List<Feed> feed = feedRepository.findAllByOrderByCreatedAtDesc();
 
-        return feeds.stream().map(Feed::to).toList();
+        return feed.stream().map(Feed::to).toList();
     }
 
     public FeedResponse readFeed(Long id) {
@@ -34,6 +34,11 @@ public class FeedService {
 
         return readFeed.to();
     }
+
+//    public List<FeedResponse> readFriendsFeed(Users user) {
+//        List<Feed> feed = feedRepository.
+//        return feed.stream().map(Feed::to).toList();
+//    }
 
     @Transactional
     public FeedResponse updateFeed(Long id, Long userIdFromToken, FeedRequest requestDto) {
