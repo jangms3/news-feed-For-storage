@@ -18,11 +18,11 @@ public class Comment extends Timestamp {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "FeedId", nullable = false)
+    @JoinColumn(name = "feed_id", nullable = false)
     private Feed feed;
 
     @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private Users users;
 
     @Column(nullable = false)
