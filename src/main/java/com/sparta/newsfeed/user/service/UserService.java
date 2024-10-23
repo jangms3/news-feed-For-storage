@@ -22,9 +22,9 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    public void signup(String username, String password, String email, boolean role) {
+    public void signup(String username, String pw, String email, boolean role) {
         checkUsername(username);
-
+        String password = passwordEncoder.encode(pw);
         Optional<Users> checkEmail = userRepository.findByEmail(email);
         if (checkEmail.isPresent()) {
             throw new IllegalArgumentException("중복된 Email이 존재합니다.");
@@ -62,16 +62,6 @@ public class UserService {
         return new ProfileResponseDto(findById(userId));
     }
 
-    public Boolean checkIdPw(String email, String password) {
-        Users user = userRepository.findByEmail(email).orElseThrow(
-                () -> new IllegalArgumentException("이메일이 잘못되었습니다.")
-        );
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("이메일 또는 비밀번호가 잘못 되었습니다");
-        }
-        return true;
-    }
-
     @Transactional
     public void updateUser(Long userId, String username, String introduction) {
         checkUsername(username);
@@ -96,5 +86,15 @@ public class UserService {
         return userRepository.findById(Userid).orElseThrow(() ->
                 new IllegalArgumentException("해당 사용자가 없습니다")
         );
+    }
+
+    public Boolean checkIdPw(String email, String password) {
+        Users user = userRepository.findByEmail(email).orElseThrow(
+                () -> new IllegalArgumentException("이메일이 잘못되었습니다.")
+        );
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("이메일 또는 비밀번호가 잘못 되었습니다");
+        }
+        return true;
     }
 }

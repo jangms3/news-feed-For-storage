@@ -5,9 +5,11 @@ public enum UserRoleEnum {
     ADMIN(Authority.ADMIN);
 
     private final String authority;
+
     UserRoleEnum(String authority){
         this.authority = authority;
     }
+
     public String getAuthority(){
         return this.authority;
     }
