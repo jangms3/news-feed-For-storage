@@ -45,7 +45,7 @@ public class CommentService {
     public CommentResponseDto updateComment(CommentRequestDto requestDto, Long feedId, Long commentId, Long userId) {
         // Feed와 Comment를 각각 조회
         Comment comment = commentRepository.findCommentById(commentId);
-        Feed feed = comment.getFeed();
+        comment.getFeed();
 
         // 권한 확인 (댓글 작성자와 수정하려는 사용자가 동일한지 확인)
         if (!comment.getUsers().getId().equals(userId)) {
@@ -62,7 +62,7 @@ public class CommentService {
     public void deleteComment(Long feedId, Long commentId, Long userId) {
         // Feed와 Comment를 각각 조회
         Comment comment = commentRepository.findCommentById(commentId);
-        Feed feed = comment.getFeed();
+        comment.getFeed();
 
         // 권한 확인 (댓글 작성자와 삭제하려는 사용자가 동일한지 확인)
         if (!comment.getUsers().getId().equals(userId)) {
@@ -76,11 +76,12 @@ public class CommentService {
     @Transactional
     public List<CommentResponseDto> getCommentsByFeedId(Long feedId) {
         // Feed 조회
-        Feed feed = feedRepository.findById(feedId)
+         feedRepository.findById(feedId)
                 .orElseThrow(() -> new IllegalArgumentException("Feed not found"));
 
         // 해당 Feed에 달린 댓글 목록 조회
-        List<Comment> comments = commentRepository.findByFeed(feed);
+        List<Comment> comments = commentRepository.findAllById(feedId);
+
         return comments.stream()
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
