@@ -1,5 +1,6 @@
 package com.sparta.newsfeed.user.controller;
 
+import com.sparta.newsfeed.config.PasswordEncoder;
 import com.sparta.newsfeed.entity.Users;
 import com.sparta.newsfeed.user.otherDto.MyProfileResponseDto;
 import com.sparta.newsfeed.user.otherDto.ProfileResponseDto;
@@ -13,9 +14,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserController {
@@ -24,7 +26,8 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup (@RequestBody @Valid SignupRequestDto requestDto) {
-        userService.signup(requestDto.getUsername(), requestDto.getPassword(), requestDto.getEmail(), requestDto.isRole());
+        userService.signup(requestDto.getUsername(), requestDto.getPassword(),
+                requestDto.getEmail(), requestDto.isRole());
         return ResponseEntity.ok("회원 가입 성공");
     }
 
@@ -33,6 +36,7 @@ public class UserController {
         userService.login(loginRequestDto, res);
         return ResponseEntity.ok("로그인 성공");
     }
+
 
     @GetMapping("/profile/my")
     @ResponseBody
