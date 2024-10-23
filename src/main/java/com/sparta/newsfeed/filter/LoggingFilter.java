@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-
 @Slf4j(topic = "LoggingFilter")
 @Component
 @Order(1)
@@ -18,7 +17,9 @@ public class LoggingFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String url = httpServletRequest.getRequestURI();
         log.info(url);
+
         chain.doFilter(request, response);
+
         log.info("비즈니스 로직 완료");
     }
 }

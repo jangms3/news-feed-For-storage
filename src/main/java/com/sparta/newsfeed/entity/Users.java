@@ -18,6 +18,7 @@ import java.util.List;
 public class Users extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "user_id")
     private Long id;
 
     @Column(nullable = false, unique = true)
@@ -41,6 +42,10 @@ public class Users extends Timestamped {
 
     @Column
     private String introduction;
+
+    // **** 피드와의 일대다 관계 ****
+    @OneToMany(mappedBy = "user")
+    private List<Feed> feeds = new ArrayList<>();
 
     @OneToMany(mappedBy = "fromUser")
     private List<Friend> fromfriendList = new ArrayList<>();

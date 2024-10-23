@@ -29,14 +29,22 @@ public class AuthFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String urI = httpServletRequest.getRequestURI();
+        String url = httpServletRequest.getRequestURI();
+        String method = httpServletRequest.getMethod();
 
         // 인증이 필요없는 URL
         // READ all feeds
+        // GET /api/feeds/{feedId}
         // signup
         // login
-        if(StringUtils.hasText(urI) && urI.equals("/") || urI.startsWith("/api/user/signup") || urI.startsWith("/api/user/login")) {
-            chain.doFilter(request, response);
+        if ( StringUtils.hasText(url) &&
+                ( url.equals("/") ||
+                        ( url.equals("/api/feeds/{feedId}") && method.equals("GET") ) ||
+                        url.startsWith("/api/user/signup") || url.startsWith("/api/user/login")
+                )
+        ) {
+            // 해당 API 요청은 인증 필요없이 요청 진행
+            chain.doFilter(request, response); // 다음 Filter 로 이동
         } else {
             String tokenValue = jwtUtil.getTokenFromRequest(httpServletRequest);
             if (StringUtils.hasText(tokenValue)) {
