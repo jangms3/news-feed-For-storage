@@ -24,7 +24,6 @@ public class CommentService {
     private final FeedRepository feedRepository;
     private final UserRepository userRepository;
 
-    // 영속성 전이 강의 한번 더 들어봐야 겠다.
     @Transactional
     public CommentResponseDto createComment(CommentRequestDto requestDto, Long feedId, Long userId) {
         // Feed 조회
@@ -32,11 +31,11 @@ public class CommentService {
                 .orElseThrow(() -> new IllegalArgumentException("Feed not found"));
 
         // User 조회
-        Users users = userRepository.findById(userId)
+        Users user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         // 새로운 댓글 생성
-        Comment comment = Comment.from(requestDto, feed, users);
+        Comment comment = Comment.from(requestDto, feed, user);
         Comment savedComment = commentRepository.save(comment);
 
         // 저장된 댓글을 CommentResponseDto로 반환
