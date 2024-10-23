@@ -7,24 +7,18 @@ import com.sparta.newsfeed.friend.dto.FriendResponseDto;
 import com.sparta.newsfeed.friend.repository.FriendRepository;
 import com.sparta.newsfeed.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class FriendService {
 
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
-
-    public FriendService(FriendRepository friendRepository, UserRepository userRepository) {
-        this.friendRepository = friendRepository;
-        this.userRepository = userRepository;
-    }
 
     @Transactional
     public void createFriends(Long toId) throws Exception {

@@ -2,6 +2,7 @@ package com.sparta.newsfeed.friend.controller;//package com.sparta.newsfeed.frie
 
 import com.sparta.newsfeed.friend.dto.FriendResponseDto;
 import com.sparta.newsfeed.friend.service.FriendService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,13 +11,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/friends")
+@RequiredArgsConstructor
 public class FriendController {
 
     private final FriendService friendService;
-
-    public FriendController(FriendService friendService) {
-        this.friendService = friendService;
-    }
 
     // 친추
     @PostMapping("/{userId}/add")

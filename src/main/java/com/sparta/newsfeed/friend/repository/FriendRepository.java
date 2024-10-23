@@ -3,7 +3,6 @@ package com.sparta.newsfeed.friend.repository;
 import com.sparta.newsfeed.entity.Friend;
 import com.sparta.newsfeed.entity.FriendshipStatus;
 import com.sparta.newsfeed.entity.Users;
-import org.apache.catalina.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
