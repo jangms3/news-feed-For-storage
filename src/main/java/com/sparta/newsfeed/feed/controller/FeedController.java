@@ -26,8 +26,8 @@ public class FeedController {
             @RequestBody @Valid FeedRequest requestDto
     ) {
         Users user = (Users) request.getAttribute("user");
-        Long userIdFromToken = user.getId();
-        FeedResponse responseDto = feedService.createFeed(userIdFromToken, requestDto);
+//        Long userIdFromToken = user.getId();
+        FeedResponse responseDto = feedService.createFeed(user, requestDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(responseDto);
@@ -57,9 +57,10 @@ public class FeedController {
             @RequestBody @Valid FeedRequest requestDto
     ) {
         Users user = (Users) request.getAttribute("user");
-        Long userIdFromToken = user.getId();
+//        Long userIdFromToken = user.getId();
 
-        FeedResponse responseDto = feedService.updateFeed(id, userIdFromToken, requestDto);
+//        FeedResponse responseDto = feedService.updateFeed(id, userIdFromToken, requestDto);
+        FeedResponse responseDto = feedService.updateFeed(id, user, requestDto);
         return ResponseEntity
             .status(HttpStatus.RESET_CONTENT)
                 .body(responseDto);

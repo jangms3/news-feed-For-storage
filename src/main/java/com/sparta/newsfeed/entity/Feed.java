@@ -30,14 +30,14 @@ public class Feed extends Timestamped {
     private Users user;
 
 
-    public Feed(Long userId, String content) {
-        this.user.setId(userId);
+    public Feed(Users user, String content) {
+        this.user = user;
 //        this.likes = 0L;
         this.content = content;
     }
 
-    public static Feed from(Long userId, FeedRequest requestDto) {
-        return new Feed(userId, requestDto.getContent());
+    public static Feed from(Users user, FeedRequest requestDto) {
+        return new Feed(user, requestDto.getContent());
     }
 
     public FeedResponse to() {
