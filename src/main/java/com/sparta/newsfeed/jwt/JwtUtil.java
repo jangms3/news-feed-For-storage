@@ -40,13 +40,17 @@ public class JwtUtil {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    public String createToken(String username, UserRoleEnum role){
+    public String createToken(String email, UserRoleEnum role){
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
-                        .setSubject(username)
-                        .claim(AUTHORIZATION_HEADER, role)
+                        // username은 중복될 수 있기 때문에 고유의 값을 가지는 email로 변경
+                        .setSubject(email)
+                        // AUTHORIZATION_HEADER > AUTHORIZATION_KEY
+                        // AUTHORIZATION_HEADER 는 헤더 이름을 나타내고
+                        // JWT의 claim은 실제 권한이나 역항 정보를 나타내는 키로 AUTHORIZATION_KEY를 사용
+                        .claim(AUTHORIZATION_KEY, role)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)
