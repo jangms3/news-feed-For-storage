@@ -38,9 +38,9 @@ public class AuthFilter implements Filter {
         // signup
         // login
         if ( StringUtils.hasText(url) &&
-                ( url.equals("/") ||
-                        ( url.equals("/api/feeds/{feedId}") && method.equals("GET") ) ||
-                        url.startsWith("/api/user/signup") || url.startsWith("/api/user/login")
+                (( url.startsWith("/api/feeds/") && method.equals("GET") )
+                        || url.startsWith("/api/user/signup")
+                        || url.startsWith("/api/user/login")
                 )
         ) {
             // 해당 API 요청은 인증 필요없이 요청 진행
