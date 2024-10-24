@@ -41,6 +41,7 @@ public class AuthFilter implements Filter {
                 (( url.startsWith("/api/feeds/") && method.equals("GET") )
                         || url.startsWith("/api/user/signup")
                         || url.startsWith("/api/user/login")
+                        || url.startsWith("/api/user/logout")
                 )
         ) {
             // 해당 API 요청은 인증 필요없이 요청 진행
