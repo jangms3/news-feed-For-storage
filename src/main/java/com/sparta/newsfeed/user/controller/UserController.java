@@ -1,6 +1,5 @@
 package com.sparta.newsfeed.user.controller;
 
-import com.sparta.newsfeed.config.PasswordEncoder;
 import com.sparta.newsfeed.entity.Users;
 import com.sparta.newsfeed.user.otherDto.MyProfileResponseDto;
 import com.sparta.newsfeed.user.otherDto.ProfileResponseDto;
