@@ -14,10 +14,11 @@ import java.util.Optional;
 public interface FriendRepository extends JpaRepository<Friend, Long> {
     @Query(value = "select friend from Friend friend WHERE friend.fromUser=:fromUser and friend.status=:status")
     List<Friend> findByFromUserAndStatusOrderByCreatedAtDesc(Users fromUser, FriendshipStatus status);
+    @Query(value = "select friend from Friend friend Where (friend.fromUser = :user or friend.toUser = :user) AND (friend.toUser = :target or friend.fromUser = :target)")
+    List<Friend> findFriends(Users user, Users target);
 
     Optional<Friend> findByFromUserIdAndToUserIdOrderByCreatedAtDesc(Long fromUserId, Long toUserId);
-    void deleteByToUserId(Long friendId);
+//    void deleteByToUserId(Long friendId);
 }
 
-//유저객채를 넘겨주는게 아니고 유저 ID값을 넘겨줄수 잇는걸 알아봐야함
 

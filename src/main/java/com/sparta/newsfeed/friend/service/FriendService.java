@@ -52,9 +52,15 @@ public class FriendService {
 
     // 친구 삭제
     @Transactional //임시방편 로직 오류일 가능성이 크다.
-    public void deleteFriends(Long id) {
-        userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User not found"));
-        friendRepository.deleteByToUserId(id);
+    public void deleteFriends(Long id, Users user) throws Exception {
+        Users fromUser = userRepository.findById(id).orElseThrow(() -> new Exception("회원 조회 실패"));
+
+//        friendRepository.findFriends(fromUser, user);
+//        friendRepository.deleteById(id);
+
+        List<Friend> friends = friendRepository.findFriends(fromUser, user);
+
+        friendRepository.deleteAll(friends);
     }
 
 //     대기 친구요청 조회
