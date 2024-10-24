@@ -37,6 +37,11 @@ public class UserController {
         return ResponseEntity.ok("로그인 성공");
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletResponse res) {
+        userService.logout(res);
+        return ResponseEntity.ok("로그아웃되었습니다.");
+    }
 
     @GetMapping("/profile/my")
     @ResponseBody

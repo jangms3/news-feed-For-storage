@@ -8,6 +8,7 @@ import com.sparta.newsfeed.user.otherDto.MyProfileResponseDto;
 import com.sparta.newsfeed.user.otherDto.ProfileResponseDto;
 import com.sparta.newsfeed.user.repository.UserRepository;
 import com.sparta.newsfeed.user.requestDto.LoginRequestDto;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,6 +53,10 @@ public class UserService {
         }
         String token = jwtUtil.createToken(user.getEmail(), user.getRole());
         jwtUtil.addJwtCookie(token, res);
+    }
+
+    public void logout(HttpServletResponse res) {
+        jwtUtil.removeJwtCookie(res);
     }
 
     public MyProfileResponseDto getMyProfile(Long userId) {
