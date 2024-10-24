@@ -29,11 +29,11 @@ public class FriendController {
     }
 
     // 친삭
-    @DeleteMapping("/{userId}/delete")
-    public ResponseEntity <String> deleteFriends(@PathVariable ("userId") Long id) {
-        friendService.deleteFriends(id);
+    @DeleteMapping("/{friendId}/delete")
+    public ResponseEntity <String> deleteFriends(@PathVariable ("friendId") Long id, HttpServletRequest request) throws Exception {
+        Users user = (Users) request.getAttribute("user");
+        friendService.deleteFriends(id, user);
         return ResponseEntity.ok("친삭 성공");
-        //인가 확인 필요
     }
 
     // 대기친구조회
