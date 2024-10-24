@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FriendService {
 
-    @Autowired
     private final FriendRepository friendRepository;
     private final UserRepository userRepository;
 
