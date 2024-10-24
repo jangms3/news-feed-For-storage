@@ -14,7 +14,7 @@
 <br>
 
 ## 3. API 명세서
-![img_4.png](img_4.png)
+![img_5.png](img_5.png)
 <br>
 <br>
 
