@@ -49,14 +49,14 @@ public class FeedController {
     }
 
     // READ friends' feeds
-//    @GetMapping("api/friends-feeds")
-//    public ResponseEntity<List<FeedResponse>> readFriendsFeed(HttpServletRequest request) {
-//        Users user = (Users) request.getAttribute("user");
-//
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(feedService.readFriendsFeed(user));
-//    }
+    @GetMapping("api/friends-feed")
+    public ResponseEntity<List<FeedResponse>> readFriendsFeed(HttpServletRequest request) {
+        Users user = (Users) request.getAttribute("user");
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(feedService.readFriendsFeed(user));
+    }
 
     // UPDATE
     @PutMapping("api/feeds/{feedId}")

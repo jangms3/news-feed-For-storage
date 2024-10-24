@@ -9,6 +9,6 @@ import java.util.List;
 public interface FeedRepository extends JpaRepository<Feed, Long> {
     List<Feed> findAllByOrderByCreatedAtDesc();
 
-//    @Query()
-//    List<Feed>
+    @Query("SELECT f FROM Feed f JOIN Friend fr ON fr.toUser.id = f.user.id WHERE fr.fromUser.id = :userId AND fr.status = 'ACCEPT' ORDER BY f.createdAt DESC")
+    List<Feed> findAllByUserId(Long userId);
 }

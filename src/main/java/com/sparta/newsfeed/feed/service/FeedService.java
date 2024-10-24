@@ -35,10 +35,11 @@ public class FeedService {
         return readFeed.to();
     }
 
-//    public List<FeedResponse> readFriendsFeed(Users user) {
-//        List<Feed> feed = feedRepository.
-//        return feed.stream().map(Feed::to).toList();
-//    }
+    @Transactional
+    public List<FeedResponse> readFriendsFeed(Users user) {
+        List<Feed> friendsFeed = feedRepository.findAllByUserId(user.getId());
+        return friendsFeed.stream().map(Feed::to).toList();
+    }
 
     @Transactional
     public FeedResponse updateFeed(Long id, Long userIdFromToken, FeedRequest requestDto) {
