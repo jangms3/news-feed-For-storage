@@ -23,16 +23,22 @@ public class FeedService {
         return savedFeed.to();
     }
 
-    public List<FeedResponse> readAllFeeds() {
-        List<Feed> feeds = feedRepository.findAllByOrderByCreatedAtDesc();
+    public List<FeedResponse> readAllFeed() {
+        List<Feed> feed = feedRepository.findAllByOrderByCreatedAtDesc();
 
-        return feeds.stream().map(Feed::to).toList();
+        return feed.stream().map(Feed::to).toList();
     }
 
     public FeedResponse readFeed(Long id) {
         Feed readFeed = feedRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 피드가 DB에 존재하지 않습니다."));
 
         return readFeed.to();
+    }
+
+    @Transactional
+    public List<FeedResponse> readFriendsFeed(Users user) {
+        List<Feed> friendsFeed = feedRepository.findAllByUserId(user.getId());
+        return friendsFeed.stream().map(Feed::to).toList();
     }
 
     @Transactional
