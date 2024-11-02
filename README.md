@@ -38,4 +38,4 @@
 ### - 열린마음으로 팀원의 의견 반영!
 <br>
 
-## 7. JDK VERSION = JDK17
+## 7. JDK VERSION = JDK17# news-feed-For-storage
